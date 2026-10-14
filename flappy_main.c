@@ -4,6 +4,7 @@
 // main program
 int main()
 {
+    // this initializes the 2d array that holds the screen
     char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1];
 
     Bird bird;
