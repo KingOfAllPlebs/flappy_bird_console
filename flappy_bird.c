@@ -1,12 +1,23 @@
 // header file
 #include "flappy_bird.h"
 
-void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird)
+// 0. takes the screen pointer as a parameter
+// 0. takes the bird as a parameter
+// 0. takes the pipe as a parameter
+// 1. makes sure the screen is blank to start
+// 2. sets the initial values for the bird
+// 3. sets the initial values for the pipe
+void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird, Pipe* pipe)
 {
+    // make sure the screen is blank
     clearScreen(screen);
+    // sets the bird's values to their starting values
     bird->birdX = START_X;
     bird->birdY = START_Y;
     bird->birdVelocity = START_VELOCITY;
+    // sets the pipe's values to their starting values
+    pipe->pipeX = SCREEN_WIDTH;
+    pipe->pipeY = SCREEN_HEIGHT / 2;
 }
 
 // 0. takes the screen pointer as a parameter
@@ -61,7 +72,7 @@ void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
 }
 
 // 0. takes the screen pointer as a parameter
-// 0. takes the bird's position as a parameter
+// 0. takes the bird as a parameter
 // 1. convert the bird's position to an array position
 // 2. loop through the spots all around the bird position
 //    to create a 3x3 grid of @s to be the bird
@@ -83,53 +94,119 @@ void drawBird(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird)
 }
 
 // 0. takes the screen pointer as a parameter
-// 0. takes the bird's position as a parameter
+// 0. takes the bird as a parameter
 // 1. clears the screen
 // 2. draws the bird
 // 3. prints the updated screen
-void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird)
+void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, Pipe pipe)
 {
     clearScreen(screen);
+    drawPipe(screen, pipe);
     drawBird(screen, bird);
     printScreen(screen);
 }
 
+// 0. returns true when space is held and false when it is not
 bool spaceDown()
 {
+    // uses the windows.h library to get if the space key is pressed
     return (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
 }
 
+// 0. returns true when escape is held and false when it is not
 bool quitDown()
 {
+    // uses the windows.h library to get if the escape key is pressed
     return (GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
 }
 
+// 0. takes the bird as a parameter
+// 1. checks if space is held and if so it makes the bird's
+//    velocity the JUMP_VELOCITY
+// 2. if space is not held then it adds GRAVITY to the velocity
+//    unless the velocity would be over MAX_VELOCITY
+// 3. adds the velocity of the bird to its y position
+// 4. makes sure the bird is within the bounds of the screen
 void updateBird(Bird* bird)
 {
+    // checks if space is being held
     if(spaceDown())
     {
+        // if it is then make the velocity equal to JUMP_VELOCITY
         bird->birdVelocity = JUMP_VELOCITY;
     }
+    // if space is not being held
     else
     {
+        // checks if the velocity is under MAX_VELOCITY
         if(bird->birdVelocity < MAX_VELOCITY)
         {
+            // if so then it can add GRAVITY to the velocity
             bird->birdVelocity += GRAVITY;
         }
+        // if the velocity is over MAX_VELOCITY
         else
         {
+            // sets the velocity to MAX_VELOCITY so it doesn't
+            // get too fast
             bird->birdVelocity = MAX_VELOCITY;
         }
     }
-
+    // adds the bird's velocity to the bird's y position
     bird->birdY += bird->birdVelocity;
-
+    // checks if the bird would be above the screen
     if(bird->birdY < 0 + ARRAY_TO_SCREEN)
     {
+        // in that case keep it at the top of the screen
         bird->birdY = 0 + ARRAY_TO_SCREEN;
     }
+    // checks if the bird would be below the screen
     else if(bird->birdY > SCREEN_HEIGHT - ARRAY_TO_SCREEN * 2)
     {
+        // in that case keep it at the bottom of the screen
         bird->birdY = SCREEN_HEIGHT - ARRAY_TO_SCREEN * 2;
+    }
+}
+
+// 0. takes the screen pointer as a parameter
+// 0. takes the pipe as a parameter
+// 1. converts the pipes coordinates to array coordinates
+// 2. draws the pipe within the bounds of the screen
+//    and with a designated width and gap size
+void drawPipe(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Pipe pipe)
+{
+    // converts the pipes coordinates to the array coordinates
+    int pipeXArray = pipe.pipeX * SCREEN_TO_ARRAY;
+    int pipeYArray = pipe.pipeY * SCREEN_TO_ARRAY;
+    // loops from the top of the screen to the bottom
+    for(int i = 1; i < ARRAY_HEIGHT - 1; i++)
+    {
+        // loops from the left side of the pipe to the right
+        for(int j = pipeXArray - PIPE_WIDTH; j < pipeXArray + PIPE_WIDTH; j++)
+        {
+            // makes sure the pipe is within the screen horizontally
+            if((j > 0 && j < ARRAY_WIDTH - 1) && 
+            // doesn't draw the parts if it's in the gap
+                !(i > pipeYArray - PIPE_GAP && i < pipeYArray + PIPE_GAP))
+            {
+                // sets the correct positions to the PIPE_CHAR #
+                screen[i][j] = PIPE_CHAR;
+            }
+        }
+    }
+}
+
+// 0. takes the pipe as a parameter
+// 1. moves the pipe to the left at a constant speed
+// 2. if the pipe goes off the screen on the left move it back to the right
+void updatePipe(Pipe* pipe)
+{
+    // add the pipes speed to its position
+    pipe->pipeX += PIPE_SPEED;
+    // checks if the pipe is off the screen to the left
+    if(pipe->pipeX <= 0)
+    {
+        // in that case move it back to the right
+        pipe->pipeX = SCREEN_WIDTH;
     }
 }

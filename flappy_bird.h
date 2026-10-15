@@ -27,10 +27,14 @@
 #define START_Y 160
 #define START_VELOCITY 0
 // constants for the movement
-#define JUMP_VELOCITY -32
-#define GRAVITY 8
+#define JUMP_VELOCITY -28
+#define GRAVITY 6
 #define MAX_VELOCITY 32
-#define MIN_VELOCITY -48
+#define MIN_VELOCITY -28
+// constants for the pipes
+#define PIPE_SPEED -16
+#define PIPE_GAP 6
+#define PIPE_WIDTH 4
 // constants for the characters on screen
 #define EMPTY_SPACE ' '
 #define BIRD_CHAR '@'
@@ -57,9 +61,17 @@ typedef struct bird
 }
 Bird;
 
+// define the pipe struct
+typedef struct pipe
+{
+    float pipeX, pipeY;
+}
+Pipe;
+
 // FUNCTIONS //////////////////////////////////////////////////////////////////
 
-void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird);
+void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird,
+    Pipe* pipe);
 
 void clearScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 
@@ -67,13 +79,17 @@ void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 
 void drawBird(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird);
 
-void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird);
+void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, Pipe pipe);
 
 bool spaceDown();
 
 bool quitDown();
 
 void updateBird(Bird* bird);
+
+void drawPipe(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Pipe pipe);
+
+void updatePipe(Pipe* pipe);
 
 // END INCLUDE GUARD //////////////////////////////////////////////////////////
 #endif
