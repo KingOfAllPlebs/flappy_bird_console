@@ -69,32 +69,46 @@ typedef struct pipe
 }
 Pipe;
 
-// FUNCTIONS //////////////////////////////////////////////////////////////////
+// FUNCTION PROTOTYPES ////////////////////////////////////////////////////////
 
+// sets all the values in the game to their starting values
 void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird,
     Pipe* pipe, gameState* currentState);
 
+// SCREEN FUNCTIONS ///////////////////////////////////////////////////////////
+
+// sets the screen to blank and draws the border
 void clearScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
-
+// prints out the screen row by row
 void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
+// combines clearScreen drawBird drawPipe and printScreen
+void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, 
+    Pipe pipe);
+// draws the start screen with the starting message
+void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
+// draws the death screen with the death message
+void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 
+// BIRD FUNCTIONS /////////////////////////////////////////////////////////////
+
+// draws the bird at it's designated position
 void drawBird(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird);
-
-void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, Pipe pipe);
-
-bool spaceDown();
-
-bool quitDown();
-
+// updates the bird's values, specifically position and velocity
 void updateBird(Bird* bird);
 
-void drawPipe(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Pipe pipe);
+// PIPE FUNCTIONS /////////////////////////////////////////////////////////////
 
+// draws the pipe at it's designated position
+void drawPipe(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Pipe pipe);
+// updates the pipe's values, specifically it's position
 void updatePipe(Pipe* pipe);
 
-void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
+// INPUT FUNCTIONS ////////////////////////////////////////////////////////////
 
-void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
+// checks whether space is pressed or not
+bool spaceDown();
+// checks whether escape is pressed or not
+bool quitDown();
 
 // END INCLUDE GUARD //////////////////////////////////////////////////////////
 #endif

@@ -1,13 +1,16 @@
 // header file
 #include "flappy_bird.h"
 
+// FUNCTION DEFINITIONS ///////////////////////////////////////////////////////
+
 // 0. takes the screen pointer as a parameter
 // 0. takes the bird as a parameter
 // 0. takes the pipe as a parameter
 // 1. makes sure the screen is blank to start
 // 2. sets the initial values for the bird
 // 3. sets the initial values for the pipe
-void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird, Pipe* pipe, gameState* currentState)
+void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird, 
+    Pipe* pipe, gameState* currentState)
 {
     // make sure the screen is blank
     clearScreen(screen);
@@ -21,6 +24,8 @@ void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird, Pipe
     // set the gameState to the starting state
     *currentState = START;
 }
+
+// SCREEN FUNCTIONS ///////////////////////////////////////////////////////////
 
 // 0. takes the screen pointer as a parameter
 // 1. clears the console
@@ -75,6 +80,69 @@ void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
 
 // 0. takes the screen pointer as a parameter
 // 0. takes the bird as a parameter
+// 1. clears the screen
+// 2. draws the bird
+// 3. prints the updated screen
+void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, Pipe pipe)
+{
+    clearScreen(screen);
+    drawPipe(screen, pipe);
+    drawBird(screen, bird);
+    printScreen(screen);
+}
+
+// 0. takes the screen pointer as a parameter
+// 1. clears the screen
+// 2. declares variables for the message and the length
+// 3. put the message on the screen
+// 4. print the screen out
+void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
+{
+    // clear the screen for a blank state
+    clearScreen(screen);
+    // initializes a string literal for the start message
+    char *startMessage = "Press Space To Start";
+    // initializes a variable for the length of the message
+    int messageLength = strlen(startMessage);
+    // loops through the length of the message
+    for(int i = 0; i < messageLength; i++)
+    {
+        // centers the message to the center of the string
+        screen[ARRAY_HEIGHT / 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
+        = startMessage[i];
+    }
+    // print the screen out
+    printScreen(screen);
+}
+
+// 0. takes the screen pointer as a parameter
+// 1. clears the screen
+// 2. declares variables for the message and the length
+// 3. put the message on the screen
+// 4. print the screen out
+void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
+{
+    // clear the screen for a blank slate
+    clearScreen(screen);
+    // initializes a string literal for the start message
+    char *deathMessage = "Press Space To Restart";
+    // initializes a variable for the length of the message
+    int messageLength = strlen(startMessage);
+    // loops through the length of the message
+    for(int i = 0; i < messageLength; i++)
+    {
+        // centers the message to the center of the string
+        screen[ARRAY_HEIGHT / 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
+        = deathMessage[i];
+    }
+    // print the screen out
+    printScreen(screen);
+}
+
+// BIRD FUNCTIONS /////////////////////////////////////////////////////////////
+
+// 0. takes the screen pointer as a parameter
+// 0. takes the bird as a parameter
 // 1. convert the bird's position to an array position
 // 2. loop through the spots all around the bird position
 //    to create a 3x3 grid of @s to be the bird
@@ -93,33 +161,6 @@ void drawBird(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird)
         }
     }
     screen[birdYArray][birdXArray + 2] = BIRD_CHAR;
-}
-
-// 0. takes the screen pointer as a parameter
-// 0. takes the bird as a parameter
-// 1. clears the screen
-// 2. draws the bird
-// 3. prints the updated screen
-void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, Pipe pipe)
-{
-    clearScreen(screen);
-    drawPipe(screen, pipe);
-    drawBird(screen, bird);
-    printScreen(screen);
-}
-
-// 0. returns true when space is held and false when it is not
-bool spaceDown()
-{
-    // uses the windows.h library to get if the space key is pressed
-    return (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
-}
-
-// 0. returns true when escape is held and false when it is not
-bool quitDown()
-{
-    // uses the windows.h library to get if the escape key is pressed
-    return (GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
 }
 
 // 0. takes the bird as a parameter
@@ -170,6 +211,8 @@ void updateBird(Bird* bird)
     }
 }
 
+// PIPE FUNCTIONS /////////////////////////////////////////////////////////////
+
 // 0. takes the screen pointer as a parameter
 // 0. takes the pipe as a parameter
 // 1. converts the pipes coordinates to array coordinates
@@ -213,50 +256,18 @@ void updatePipe(Pipe* pipe)
     }
 }
 
-// 0. takes the screen pointer as a parameter
-// 1. clears the screen
-// 2. declares variables for the message and the length
-// 3. put the message on the screen
-// 4. print the screen out
-void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
+// INPUT FUNCTIONS ////////////////////////////////////////////////////////////
+
+// 0. returns true when space is held and false when it is not
+bool spaceDown()
 {
-    // clear the screen for a blank state
-    clearScreen(screen);
-    // initializes a string literal for the start message
-    char *startMessage = "Press Space To Start";
-    // initializes a variable for the length of the message
-    int messageLength = strlen(startMessage);
-    // loops through the length of the message
-    for(int i = 0; i < messageLength; i++)
-    {
-        // centers the message to the center of the string
-        screen[ARRAY_HEIGHT / 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
-        = startMessage[i];
-    }
-    // print the screen out
-    printScreen(screen);
+    // uses the windows.h library to get if the space key is pressed
+    return (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
 }
 
-// 0. takes the screen pointer as a parameter
-// 1. clears the screen
-// 2. declares variables for the message and the length
-// 3. put the message on the screen
-// 4. print the screen out
-void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
+// 0. returns true when escape is held and false when it is not
+bool quitDown()
 {
-    // clear the screen for a blank slate
-    clearScreen(screen);
-    // initializes a string literal for the start message
-    char *deathMessage = "Press Space To Restart";
-    // initializes a variable for the length of the message
-    int messageLength = strlen(startMessage);
-    // loops through the length of the message
-    for(int i = 0; i < messageLength; i++)
-    {
-        // centers the message to the center of the string
-        screen[ARRAY_HEIGHT / 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
-        = deathMessage[i];
-    }
-    // print the screen out
-    printScreen(screen);
+    // uses the windows.h library to get if the escape key is pressed
+    return (GetAsyncKeyState(VK_ESCAPE) & 0x8000) != 0;
 }
