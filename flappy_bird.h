@@ -9,6 +9,7 @@
 #include <time.h> // for time
 #include <windows.h> // for GetAsyncKeyState & Sleep
 #include <stdbool.h> // for true and false
+#include <string.h> // for strlen
 
 // GLOBAL CONSTANTS ///////////////////////////////////////////////////////////
 
@@ -71,7 +72,7 @@ Pipe;
 // FUNCTIONS //////////////////////////////////////////////////////////////////
 
 void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird,
-    Pipe* pipe);
+    Pipe* pipe, gameState* currentState);
 
 void clearScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 
@@ -90,6 +91,10 @@ void updateBird(Bird* bird);
 void drawPipe(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Pipe pipe);
 
 void updatePipe(Pipe* pipe);
+
+void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
+
+void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 
 // END INCLUDE GUARD //////////////////////////////////////////////////////////
 #endif
