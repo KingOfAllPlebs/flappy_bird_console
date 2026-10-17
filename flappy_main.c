@@ -24,7 +24,8 @@ int main()
             case START:
             {
                 // draw the start message on the screen
-                updateScreen(screen, bird, pipe, "FLAPPY BIRD", "Press Space To Start");
+                updateScreen(screen, bird, pipe, "FLAPPY BIRD", 
+                    "Press Space To Start");
                 // checks if you press space to start
                 if(spaceDown())
                 {
@@ -38,6 +39,12 @@ int main()
             {
                 // updates the values behind the scenes for the bird
                 updateBird(&bird);
+                // check if the bird is touching the floor
+                if(checkFloorCollision(&bird))
+                {
+                    // if so then the game is done
+                    currentState = DEAD;
+                }
                 // updates the values behind the scenes for the pipe
                 updatePipe(&pipe);
                 // updates the visuals that you see
@@ -48,10 +55,13 @@ int main()
             case DEAD:
             {
                 // draw the death message on the screen
-                //drawDead(screen);
+                updateScreen(screen, bird, pipe, "YOU DIED", 
+                    "Press Space To Restart");
                 // checks if you press space to restart
                 if(spaceDown())
                 {
+                    // reset all game values
+                    initializeGame(screen, &bird, &pipe, &currentState);
                     // sets the state back to the playing state
                     currentState = PLAYING;
                 }

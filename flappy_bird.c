@@ -91,13 +91,19 @@ void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
 void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, 
     Pipe pipe, const char* title, const char* message)
 {
+    // clear the screen back to it beingonly the border
     clearScreen(screen);
+    // draw the pipe onto the screen
     drawPipe(screen, pipe);
+    // draw the bird onto the screen
     drawBird(screen, bird);
+    // if there is a title and message to be drawn
     if(strlen(title) != 0 && strlen(message) != 0)
     {
+        // draw the title and message onto the screen
         drawTitleMessage(screen, title, message);
     }
+    // print out the screen after all the previous edits
     printScreen(screen);
 }
 
@@ -116,15 +122,32 @@ void drawTitleMessage(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1],
     // loops through the length of the title
     for(int i = 0; i < titleLength; i++)
     {
-        // centers the title to the center of the string
-        screen[ARRAY_HEIGHT / 3][ARRAY_WIDTH / 2 - (titleLength / 2) + i] 
-        = title[i];
+        // loop to put a border around the title
+        for(int j = 0; j < 3; j++)
+        {
+            // checks if it's at the top or bottom of the title
+            if(j == 0 || j == 2)
+            {
+                // put the borders at the top and bottom of the title
+                screen[ARRAY_HEIGHT / 3 - 1 + j]
+                [ARRAY_WIDTH / 2 - (titleLength / 2) + i] 
+                = TITLE_CHAR;
+            }
+            else
+            {
+                // put the title message in between the borders
+                screen[ARRAY_HEIGHT / 3 - 1 + j]
+                [ARRAY_WIDTH / 2 - (titleLength / 2) + i] 
+                = title[i];
+            }
+        }
     }
     // loops through the length of the message
     for(int i = 0; i < messageLength; i++)
     {
         // centers the message to the center of the string
-        screen[(ARRAY_HEIGHT / 3) * 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
+        screen[(ARRAY_HEIGHT / 3) * 2]
+        [ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
         = message[i];
     }
 }
@@ -187,18 +210,6 @@ void updateBird(Bird* bird)
     }
     // adds the bird's velocity to the bird's y position
     bird->birdY += bird->birdVelocity;
-    // checks if the bird would be above the screen
-    if(bird->birdY < 0 + ARRAY_TO_SCREEN)
-    {
-        // in that case keep it at the top of the screen
-        bird->birdY = 0 + ARRAY_TO_SCREEN;
-    }
-    // checks if the bird would be below the screen
-    else if(bird->birdY > SCREEN_HEIGHT - ARRAY_TO_SCREEN * 2)
-    {
-        // in that case keep it at the bottom of the screen
-        bird->birdY = SCREEN_HEIGHT - ARRAY_TO_SCREEN * 2;
-    }
 }
 
 // PIPE FUNCTIONS /////////////////////////////////////////////////////////////
@@ -241,8 +252,38 @@ void updatePipe(Pipe* pipe)
     // checks if the pipe is off the screen to the left
     if(pipe->pipeX <= 0)
     {
+        // move the pipes center to a new random positoin
+        pipe->pipeY = (rand() % (MAX_PIPE_Y - MIN_PIPE_Y + 1)) + MIN_PIPE_Y;
         // in that case move it back to the right
         pipe->pipeX = SCREEN_WIDTH;
+    }
+}
+
+// COLLISION FUNCTIONS ////////////////////////////////////////////////////////
+
+bool checkFloorCollision(Bird* bird)
+{
+    // checks if the bird would be above the screen
+    if(bird->birdY < 0 + ARRAY_TO_SCREEN)
+    {
+        // keep the bird at the top
+        bird->birdY = 0 + ARRAY_TO_SCREEN;
+        // the bird is touching the ceiling
+        return true;
+    }
+    // checks if the bird would be below the screen
+    else if(bird->birdY > SCREEN_HEIGHT - ARRAY_TO_SCREEN * 2)
+    {
+        // keep the bird at the bottom
+        bird->birdY = SCREEN_HEIGHT - ARRAY_TO_SCREEN * 2;
+        // the bird is touching the floor
+        return true;
+    }
+    // any other case
+    else
+    {
+        // the bird is in bounds
+        return false;
     }
 }
 

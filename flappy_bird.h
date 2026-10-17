@@ -34,13 +34,16 @@
 #define MIN_VELOCITY -28
 // constants for the pipes
 #define PIPE_SPEED -16
-#define PIPE_GAP 6
+#define PIPE_GAP 5
 #define PIPE_WIDTH 4
+#define MAX_PIPE_Y 298
+#define MIN_PIPE_Y 96
 // constants for the characters on screen
 #define EMPTY_SPACE ' '
 #define BIRD_CHAR '@'
 #define PIPE_CHAR '#'
 #define BORDER_CHAR 'O'
+#define TITLE_CHAR '='
 // game time control
 #define SLEEP_TIME 50
 
@@ -101,6 +104,11 @@ void updateBird(Bird* bird);
 void drawPipe(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Pipe pipe);
 // updates the pipe's values, specifically it's position
 void updatePipe(Pipe* pipe);
+
+// COLLISION FUNCTIONS ////////////////////////////////////////////////////////
+
+// check if the bird is at the top or bottom of the screen
+bool checkFloorCollision(Bird* bird);
 
 // INPUT FUNCTIONS ////////////////////////////////////////////////////////////
 
