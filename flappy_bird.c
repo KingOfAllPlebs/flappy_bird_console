@@ -6,12 +6,15 @@
 // 0. takes the screen pointer as a parameter
 // 0. takes the bird as a parameter
 // 0. takes the pipe as a parameter
-// 1. makes sure the screen is blank to start
-// 2. sets the initial values for the bird
-// 3. sets the initial values for the pipe
+// 1. seeds the random number generator
+// 2. makes sure the screen is blank to start
+// 3. sets the initial values for the bird
+// 4. sets the initial values for the pipe
 void initializeGame(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird* bird, 
     Pipe* pipe, gameState* currentState)
 {
+    // seed the random number generator
+    srand(time(NULL));
     // make sure the screen is blank
     clearScreen(screen);
     // sets the bird's values to their starting values
@@ -82,61 +85,48 @@ void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
 // 0. takes the bird as a parameter
 // 1. clears the screen
 // 2. draws the bird
-// 3. prints the updated screen
-void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, Pipe pipe)
+// 3. checks if there is a message and title to be displayed
+// 4. if so, display the title and message
+// 5. prints the updated screen
+void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, 
+    Pipe pipe, const char* title, const char* message)
 {
     clearScreen(screen);
     drawPipe(screen, pipe);
     drawBird(screen, bird);
+    if(strlen(title) != 0 && strlen(message) != 0)
+    {
+        drawTitleMessage(screen, title, message);
+    }
     printScreen(screen);
 }
 
 // 0. takes the screen pointer as a parameter
-// 1. clears the screen
-// 2. declares variables for the message and the length
-// 3. put the message on the screen
-// 4. print the screen out
-void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
+// 0. takes a string for the title and the message as a parameter
+// 1. initializes the length of both strings
+// 2. draws out the title at the first third
+// 3. draws out the message at the second third
+void drawTitleMessage(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], 
+    const char* title, const char* message)
 {
-    // clear the screen for a blank state
-    clearScreen(screen);
-    // initializes a string literal for the start message
-    char *startMessage = "Press Space To Start";
+    // initializes a variable for the length of the title
+    int titleLength = strlen(title);
     // initializes a variable for the length of the message
-    int messageLength = strlen(startMessage);
+    int messageLength = strlen(message);
+    // loops through the length of the title
+    for(int i = 0; i < titleLength; i++)
+    {
+        // centers the title to the center of the string
+        screen[ARRAY_HEIGHT / 3][ARRAY_WIDTH / 2 - (titleLength / 2) + i] 
+        = title[i];
+    }
     // loops through the length of the message
     for(int i = 0; i < messageLength; i++)
     {
         // centers the message to the center of the string
-        screen[ARRAY_HEIGHT / 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
-        = startMessage[i];
+        screen[(ARRAY_HEIGHT / 3) * 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
+        = message[i];
     }
-    // print the screen out
-    printScreen(screen);
-}
-
-// 0. takes the screen pointer as a parameter
-// 1. clears the screen
-// 2. declares variables for the message and the length
-// 3. put the message on the screen
-// 4. print the screen out
-void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1])
-{
-    // clear the screen for a blank slate
-    clearScreen(screen);
-    // initializes a string literal for the start message
-    char *deathMessage = "Press Space To Restart";
-    // initializes a variable for the length of the message
-    int messageLength = strlen(startMessage);
-    // loops through the length of the message
-    for(int i = 0; i < messageLength; i++)
-    {
-        // centers the message to the center of the string
-        screen[ARRAY_HEIGHT / 2][ARRAY_WIDTH / 2 - (messageLength / 2) + i] 
-        = deathMessage[i];
-    }
-    // print the screen out
-    printScreen(screen);
 }
 
 // BIRD FUNCTIONS /////////////////////////////////////////////////////////////

@@ -24,7 +24,7 @@ int main()
             case START:
             {
                 // draw the start message on the screen
-                drawStart(screen);
+                updateScreen(screen, bird, pipe, "FLAPPY BIRD", "Press Space To Start");
                 // checks if you press space to start
                 if(spaceDown())
                 {
@@ -41,14 +41,14 @@ int main()
                 // updates the values behind the scenes for the pipe
                 updatePipe(&pipe);
                 // updates the visuals that you see
-                updateScreen(screen, bird, pipe);
+                updateScreen(screen, bird, pipe, "", "");
                 break;
             }
             // case when the bird dies
             case DEAD:
             {
                 // draw the death message on the screen
-                drawDead(screen)
+                //drawDead(screen);
                 // checks if you press space to restart
                 if(spaceDown())
                 {

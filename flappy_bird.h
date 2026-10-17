@@ -83,11 +83,10 @@ void clearScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 void printScreen(const char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
 // combines clearScreen drawBird drawPipe and printScreen
 void updateScreen(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], Bird bird, 
-    Pipe pipe);
-// draws the start screen with the starting message
-void drawStart(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
-// draws the death screen with the death message
-void drawDead(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1]);
+    Pipe pipe, const char* title, const char* message);
+// function to draw a title and a message
+void drawTitleMessage(char screen[ARRAY_HEIGHT][ARRAY_WIDTH + 1], 
+    const char* title, const char* message);
 
 // BIRD FUNCTIONS /////////////////////////////////////////////////////////////
 
