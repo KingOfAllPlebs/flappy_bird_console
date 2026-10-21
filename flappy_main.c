@@ -39,8 +39,8 @@ int main()
             {
                 // updates the values behind the scenes for the bird
                 updateBird(&bird);
-                // check if the bird is touching the floor
-                if(checkFloorCollision(&bird))
+                // check if the bird is touching the floor or the pipe
+                if(checkFloorCollision(&bird) || checkPipeCollision(&bird, pipe))
                 {
                     // if so then the game is done
                     currentState = DEAD;

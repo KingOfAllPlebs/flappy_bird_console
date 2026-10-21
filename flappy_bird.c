@@ -261,6 +261,12 @@ void updatePipe(Pipe* pipe)
 
 // COLLISION FUNCTIONS ////////////////////////////////////////////////////////
 
+// 0. takes the bird in as a parameter
+// 1. checks if the bird would be above the screen
+// 2. if so set the bird's y to the top to avoid overflow and return true
+// 3. checks if the bird would be below the screen
+// 4. if so set the bird's y to the bottom to avoid overflow and return true
+// 5. otherwise return false
 bool checkFloorCollision(Bird* bird)
 {
     // checks if the bird would be above the screen
@@ -283,6 +289,32 @@ bool checkFloorCollision(Bird* bird)
     else
     {
         // the bird is in bounds
+        return false;
+    }
+}
+
+// 0. takes the bird as a parameter
+// 0. takes the pipe as a parameter
+// 1. checks if the bird is within the y range of the pipes
+// 1. chekcs if the bird is within the x range of the pipes
+// 2. if it's within range return true
+// 3. otherwise return false
+bool checkPipeCollision(Bird* bird, Pipe pipe)
+{   
+    // check if the bird is in the y range of the pipes
+    if((bird->birdY < pipe.pipeY - PIPE_GAP * ARRAY_TO_SCREEN ||
+        bird->birdY > pipe.pipeY + PIPE_GAP * ARRAY_TO_SCREEN ) &&
+    // check if the bird is in the x range of the pipes
+        (bird->birdX < pipe.pipeX + (PIPE_WIDTH - 2) * ARRAY_TO_SCREEN &&
+        bird->birdX > pipe.pipeX - (PIPE_WIDTH + 2) * ARRAY_TO_SCREEN))
+    {
+        // returns true if the bird is over the pipe
+        return true;
+    }
+    // if the bird is not within the pipe
+    else
+    {
+        // returns false
         return false;
     }
 }

@@ -109,6 +109,8 @@ void updatePipe(Pipe* pipe);
 
 // check if the bird is at the top or bottom of the screen
 bool checkFloorCollision(Bird* bird);
+// check if the bird is colliding with the pipe
+bool checkPipeCollision(Bird* bird, Pipe pipe);
 
 // INPUT FUNCTIONS ////////////////////////////////////////////////////////////
 
